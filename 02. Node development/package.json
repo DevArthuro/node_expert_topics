@@ -2,9 +2,11 @@
   "name": "02.-node-development",
   "version": "1.0.0",
   "description": "This is the sencond part of the course ",
-  "main": "index.js",
+  "main": "src/index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start:dev": "node src/01.executeScripts.js",
+    "start:echo": "echo 'Hola mundo desde script' && exit 1"
   },
   "author": "Carlos",
   "license": "ISC"
