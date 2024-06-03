@@ -1,7 +1,13 @@
 version: "3.9"
 
+# If you only need mongo comment everything but the service (mongoDB, mongo-express)
+# If you only need postgres comment everything but the service (postgresDB, pgAdmin)
+
 services:
   # Set up mongo db
+
+  # This run http://127.0.0.1:27017 away the container
+  # Inside container the access is http://mongoDB:27017
   mongoDB:
     container_name: mongoDB
     image: mongo
@@ -9,11 +15,14 @@ services:
       - 27017:27017
     networks:
       - node
+    # Custom credentials access DB
     environment:
       - MONGO_INITDB_ROOT_USERNAME=root
       - MONGO_INITDB_ROOT_PASSWORD=root
+    # The storage DB is map away in especific folder
     volumes:
-      - ./databases/mongodb:/data/db
+      - ./databases/mongodb:/data/db # local:container
+    # Check if mongoDB is up
     healthcheck:
       test: echo 'db.runCommand("ping").ok' | mongosh localhost:27017/test --quiet
       interval: 10s
@@ -21,12 +30,17 @@ services:
       retries: 3
       start_period: 20s
 
+  # Access the administrator
+  # Away container the access is http://127.0.0.1:8081
+  # Inside container is http://mongo-express:8081 - hold the credentials
   mongo-express:
     container_name: mongo_express
     image: mongo-express:1.0.2-20-alpine3.19
     restart: always
     ports:
       - 8081:8081
+    # Custom credentials administrator mongo
+    # Check this for access
     environment:
       ME_CONFIG_MONGODB_ADMINUSERNAME: root
       ME_CONFIG_MONGODB_ADMINPASSWORD: root
@@ -34,9 +48,56 @@ services:
       ME_CONFIG_BASICAUTH: false
     networks:
       - node
+    # Wait the mongoDB is up
     depends_on:
       mongoDB:
         condition: service_healthy
 
+  # Set up postgres
+
+  # Access the DB
+  # Away the container http://127.0.0.1:5432
+  # Inside de container http://postgresDB:5432
+  postgresDB:
+    container_name: postgres
+    image: postgres:16rc1
+    # The access for db - credentials
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=postgres
+    # This container expose 5432 away and inside
+    ports:
+      - "5432:5432"
+    # The storage DB is map away in especific folder
+    volumes:
+      - ./databases/postgres:/var/lib/postgresql/data # local:container
+    # see if the DB postgres is working
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 15s
+      timeout: 10s
+      retries: 5
+    restart: "always"
+    networks:
+      - node
+
+  # Postgres administrator
+  # Away the container http://127.0.0.1:8082
+  # Inside the container http://pgadmin:80
+  pgadmin:
+    container_name: pgadmin
+    image: dpage/pgadmin4
+    ports:
+      - "8082:80"
+    # With this credentialss with can sing in in the postgres manager
+    environment:
+      - PGADMIN_DEFAULT_EMAIL=correo@test.com
+      - PGADMIN_DEFAULT_PASSWORD=12345
+    restart: "always"
+    networks:
+      - node
+
+# All container must to be connected in this network
 networks:
   node: {}
