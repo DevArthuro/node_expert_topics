@@ -6,7 +6,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start:dev": "node src/01.executeScripts.js",
-    "start:echo": "echo 'Hola mundo desde script' && exit 1"
+    "start:echo": "echo 'Hola mundo desde script' && exit 1",
+    "dev:exports": "node src/02.export-and-require/fileRecept.js"
   },
   "author": "Carlos",
   "license": "ISC"
