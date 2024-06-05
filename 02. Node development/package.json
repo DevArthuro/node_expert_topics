@@ -11,6 +11,7 @@
     "dev:nodemon": "nodemon src/03.process.js",
     "dev:callBacks": "nodemon src/04.callBacks/index.js",
     "dev:adapter": "nodemon src/05.adapterPattern/index.js",
+    "dev:factory": "nodemon src/06.factoryFunctions/index.js"
   },
   "author": "Carlos",
   "license": "ISC",
