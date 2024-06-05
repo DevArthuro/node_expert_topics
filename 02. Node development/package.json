@@ -9,11 +9,16 @@
     "start:echo": "echo 'Hola mundo desde script' && exit 1",
     "dev:exports": "node src/02.export-and-require/fileRecept.js",
     "dev:nodemon": "nodemon src/03.process.js",
-    "dev:callBacks": "nodemon src/04.callBacks/index.js"
+    "dev:callBacks": "nodemon src/04.callBacks/index.js",
+    "dev:adapter": "nodemon src/05.adapterPattern/index.js",
   },
   "author": "Carlos",
   "license": "ISC",
   "devDependencies": {
     "nodemon": "^3.1.3"
+  },
+  "dependencies": {
+    "get-age": "^1.0.1",
+    "uuid": "^9.0.1"
   }
 }
